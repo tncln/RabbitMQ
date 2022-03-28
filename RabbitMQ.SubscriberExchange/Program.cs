@@ -4,22 +4,24 @@ using System;
 using System.Text;
 using System.Threading;
 
-namespace RabbitMQ.subscriber
+namespace RabbitMQ.SubscriberExchange
 {
     class Program
     {
         static void Main(string[] args)
         {
-            
             var factory = new ConnectionFactory();
 
             factory.Uri = new Uri("amqps://tpmxkawx:tP_TZFioZbqGBarCUE3Lsl4l-C8jDaed@fish.rmq.cloudamqp.com/tpmxkawx");
-             
+
             using var connection = factory.CreateConnection(); //Connection Gerçekleşir. 
 
             var channel = connection.CreateModel(); //Kanal Oluşur
 
-             
+            #region Fanout ile eklendi..
+            var randomQueueName = channel.QueueDeclare().QueueName; //random kuyruk,,
+            channel.QueueBind(randomQueueName, "logs-fanout", "", null); // kuyruk bind işlemi..
+            #endregion
 
 
 
@@ -34,7 +36,9 @@ namespace RabbitMQ.subscriber
 
             //autoAck:true olursa doğruda işlense yanlışta işlense kuyruktan siler. false olursa,
             //kuyruktan silmez doğru işlerse silmek için haber verir
-            channel.BasicConsume("hello-queue", false, consumer);
+            channel.BasicConsume(randomQueueName, false, consumer);
+
+            Console.WriteLine("Logları dinleniyor..");
 
             consumer.Received += (object sender, BasicDeliverEventArgs e) =>
             {
@@ -45,6 +49,6 @@ namespace RabbitMQ.subscriber
             };
 
             Console.ReadLine();
-        } 
+        }
     }
 }

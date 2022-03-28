@@ -17,24 +17,22 @@ namespace RabbitMQ.FanoutExchange
             using var connection = factory.CreateConnection(); //Connection Gerçekleşir.
 
 
-            var channel = connection.CreateModel(); //Kanal Oluşur
+            var channel = connection.CreateModel(); //Kanal Oluşur 
 
+            //channel.QueueDeclare("hello-queue", true, false, false); //Kuyruk oluşur..
 
-            //durable: true olursa fiziksel tutulur restart edilirse sorun olmaz, false olursa bellekte tutulur
-            //exclusive:true olursa kuyruğa sadece bu kanal üzerinden bağlanabilir başka bağlantı kabul etmez 
-            //autoDelete: Kuyruğa bağlı olan son subscribe bağlantısını koparırsa kuyruğu otomatik siler.
-            channel.QueueDeclare("hello-queue", true, false, false); //Kuyruk oluşur..
+            channel.ExchangeDeclare("logs-fanout", durable: true, type: ExchangeType.Fanout);
 
             Enumerable.Range(1, 50).ToList().ForEach(x =>
             {
-                string mesaj = $"message {x}";
+                string mesaj = $"log {x}";
 
 
                 //Kuyruğa mesajlar, byte[] olarak gönderilir. 
                 var messageBody = Encoding.UTF8.GetBytes(mesaj);
+                 
 
-
-                channel.BasicPublish(string.Empty, "hello-queue", null, messageBody); //mesaj gönderilir. 
+                channel.BasicPublish("logs-fanout","", null, messageBody); //mesaj gönderilir. 
 
                 Console.WriteLine($"{x}. Mesaj Gönderilmiştir.");
             });
