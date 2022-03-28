@@ -10,6 +10,7 @@ namespace RabbitMQ.subscriber
     {
         static void Main(string[] args)
         {
+            
             var factory = new ConnectionFactory();
 
             factory.Uri = new Uri("amqps://tpmxkawx:tP_TZFioZbqGBarCUE3Lsl4l-C8jDaed@fish.rmq.cloudamqp.com/tpmxkawx");
