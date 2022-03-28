@@ -19,7 +19,10 @@ namespace RabbitMQ.SubscriberExchange
             var channel = connection.CreateModel(); //Kanal Oluşur
 
             #region Fanout ile eklendi..
-            var randomQueueName = channel.QueueDeclare().QueueName; //random kuyruk,,
+            var randomQueueName = channel.QueueDeclare().QueueName; //random kuyruk,,eğer ki kuyruk cunsomer down olduğunda silinsin istenmiyorsa sabit bir isim verilir. 
+
+            // channel.QueueDeclare(randomQueueName, true, false, false); Kuyruk sabit silinmesin istendiğinde eklenir. 
+
             channel.QueueBind(randomQueueName, "logs-fanout", "", null); // kuyruk bind işlemi..
             #endregion
 

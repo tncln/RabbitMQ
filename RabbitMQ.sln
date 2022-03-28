@@ -7,9 +7,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RabbitMQ.publisher", "Rabbi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RabbitMQ.subscriber", "RabbitMQ.subscriber\RabbitMQ.subscriber.csproj", "{B02BAFAB-C071-4B5A-918C-68210F90FEF0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RabbitMQ.FanoutExchange", "RabbitMQ.FanoutExchange\RabbitMQ.FanoutExchange.csproj", "{54833CC8-FB2C-47FA-97A0-A0A0ABAD9B22}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RabbitMQ.PublisherFanoutExchange", "RabbitMQ.FanoutExchange\RabbitMQ.PublisherFanoutExchange.csproj", "{54833CC8-FB2C-47FA-97A0-A0A0ABAD9B22}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RabbitMQ.SubscriberExchange", "RabbitMQ.SubscriberExchange\RabbitMQ.SubscriberExchange.csproj", "{1CBC5357-19D4-4676-923C-D6A3FCF7B63D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RabbitMQ.SubscriberFanoutExchange", "RabbitMQ.SubscriberExchange\RabbitMQ.SubscriberFanoutExchange.csproj", "{1CBC5357-19D4-4676-923C-D6A3FCF7B63D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
