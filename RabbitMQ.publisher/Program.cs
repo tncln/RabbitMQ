@@ -1,5 +1,6 @@
 ﻿using RabbitMQ.Client;
 using System;
+using System.Linq;
 using System.Text;
 
 namespace RabbitMQ.publisher
@@ -24,16 +25,22 @@ namespace RabbitMQ.publisher
             //autoDelete: Kuyruğa bağlı olan son subscribe bağlantısını koparırsa kuyruğu otomatik siler.
             channel.QueueDeclare("hello-queue", true, false, false); //Kuyruk oluşur..
 
-            string mesaj = "hello world";
+            Enumerable.Range(1, 50).ToList().ForEach (x=>
+            {
+                string mesaj = $"message {x}";
 
 
-            //Kuyruğa mesajlar, byte[] olarak gönderilir. 
-            var messageBody = Encoding.UTF8.GetBytes(mesaj);
+                //Kuyruğa mesajlar, byte[] olarak gönderilir. 
+                var messageBody = Encoding.UTF8.GetBytes(mesaj);
 
 
-            channel.BasicPublish(string.Empty, "hello-queue", null, messageBody); //mesaj gönderilir. 
+                channel.BasicPublish(string.Empty, "hello-queue", null, messageBody); //mesaj gönderilir. 
 
-            Console.WriteLine("Mesaj Gönderilmiştir.");
+                Console.WriteLine($"{x}. Mesaj Gönderilmiştir.");
+            });
+
+            
+
             Console.ReadLine();
         }
     }
