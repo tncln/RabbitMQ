@@ -17,9 +17,7 @@ namespace RabbitMQ.SubscriberTopicExchange
 
             using var connection = factory.CreateConnection(); //Connection Gerçekleşir. 
 
-            var channel = connection.CreateModel(); //Kanal Oluşur
-
-
+            var channel = connection.CreateModel(); //Kanal Oluşur 
 
 
             channel.BasicQos(0, 1, false);//false, Her subscriber a 1 1 gönderir Değer kaç ise, true; 10 adet ise,
@@ -31,7 +29,11 @@ namespace RabbitMQ.SubscriberTopicExchange
 
             var consumer = new EventingBasicConsumer(channel);
 
-            var queueName = "direct-queue-Critical";
+            var queueName = channel.QueueDeclare().QueueName;
+
+            var routekey = "*.Error.*";
+
+            channel.QueueBind(queueName, "logs-topic",routekey);
 
             //autoAck:true olursa doğruda işlense yanlışta işlense kuyruktan siler. false olursa,
             //kuyruktan silmez doğru işlerse silmek için haber verir
