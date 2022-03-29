@@ -1,9 +1,11 @@
 ﻿using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using RabbitMQ.Shared;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Text.Json;
 using System.Threading;
 
 namespace RabbitMQ.SubscriberHeaderExchange
@@ -48,6 +50,9 @@ namespace RabbitMQ.SubscriberHeaderExchange
             consumer.Received += (object sender, BasicDeliverEventArgs e) =>
             {
                 var message = Encoding.UTF8.GetString(e.Body.ToArray());
+
+                Product product = JsonSerializer.Deserialize<Product>(message); 
+
                 Thread.Sleep(1500);
                 Console.WriteLine("Gelen Mesaj:" + message); 
                 channel.BasicAck(e.DeliveryTag, false);// kuyruktan okunan mesajın silinmesini sağlar. Başarılı şekilde işlendi artık kuyruktan sil denilir. 
