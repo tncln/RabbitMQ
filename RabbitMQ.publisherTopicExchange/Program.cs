@@ -1,7 +1,17 @@
-﻿using System;
+﻿using RabbitMQ.Client;
+using System;
+using System.Linq;
+using System.Text;
 
 namespace RabbitMQ.publisherTopicExchange
 {
+    public enum LogNames
+    {
+        Critical = 1,
+        Error = 2,
+        Warning = 3,
+        Info = 4
+    }
     class Program
     {
         static void Main(string[] args)
