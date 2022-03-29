@@ -1,6 +1,7 @@
 ﻿using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading;
@@ -18,7 +19,7 @@ namespace RabbitMQ.SubscriberHeaderExchange
             using var connection = factory.CreateConnection(); //Connection Gerçekleşir. 
 
             var channel = connection.CreateModel(); //Kanal Oluşur 
-
+            channel.ExchangeDeclare("header-exchange", durable: true, type: ExchangeType.Headers);
 
             channel.BasicQos(0, 1, false);//false, Her subscriber a 1 1 gönderir Değer kaç ise, true; 10 adet ise,
                                           //subscriber 5 ise 2şer şeklinde gönderir. 
@@ -31,9 +32,12 @@ namespace RabbitMQ.SubscriberHeaderExchange
 
             var queueName = channel.QueueDeclare().QueueName;
 
-            var routekey = "*.Error.*";
+            Dictionary<string, object> headers = new Dictionary<string, object>();
+            headers.Add("format", "pdf");
+            headers.Add("shape", "a4");
+            headers.Add("x-match", "all");
 
-            channel.QueueBind(queueName, "logs-topic", routekey);
+            channel.QueueBind(queueName, exchange:"header-exchange", string.Empty,headers);
 
             //autoAck:true olursa doğruda işlense yanlışta işlense kuyruktan siler. false olursa,
             //kuyruktan silmez doğru işlerse silmek için haber verir
@@ -45,8 +49,7 @@ namespace RabbitMQ.SubscriberHeaderExchange
             {
                 var message = Encoding.UTF8.GetString(e.Body.ToArray());
                 Thread.Sleep(1500);
-                Console.WriteLine("Gelen Mesaj:" + message);
-                File.AppendAllText("log-critical.txt", message + "\n");
+                Console.WriteLine("Gelen Mesaj:" + message); 
                 channel.BasicAck(e.DeliveryTag, false);// kuyruktan okunan mesajın silinmesini sağlar. Başarılı şekilde işlendi artık kuyruktan sil denilir. 
             };
 
